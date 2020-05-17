@@ -25,6 +25,7 @@ public:
 	{
 		friend Iterator Vector<T>::begin();
 		friend Iterator Vector<T>::end();
+		friend void Vector<T>::insert(Iterator iter, T &data);
 	public:
 		Iterator() {};
 		Iterator(Iterator &obj) :pointer(obj.pointer) {};
@@ -35,7 +36,7 @@ public:
 		}
 		const Iterator operator++(int)
 		{
-			Vector<T>::Iterator copy(this);
+			Vector<T>::Iterator copy(*this);
 			pointer += sizeof(T);
 			return copy;
 		}
@@ -62,7 +63,7 @@ public:
 		beg.pointer = pointer + sizeof(T) * size;
 		return beg;
 	}
-	Vector(Vector& obj)
+	Vector(Vector &obj)
 	{
 		this->size = size;
 		T *new_mas = (T*)calloc(size, sizeof(T));
@@ -71,6 +72,41 @@ public:
 		while (iter != obj.end())
 			pointer[i++] = *iter++;
 	}
+	void push_back(T &data)
+	{
+		size++;
+		T *new_mas = (T*)calloc(size, sizeof(T));
+		for (int i = 0; i < size - 1; i++)
+			new_mas[i] = pointer[i];
+		new_mas[size - 1] = data;
+		free(pointer);
+		pointer = new_mas;
+	}
+	void pop_back()
+	{
+		size--;
+		T *new_mas = (T*)calloc(size, sizeof(T));
+		for (int i = 0; i < size; i++)
+			new_mas[i] = pointer[i];
+		free(pointer);
+		pointer = new_mas;
+	}
+	void insert(Iterator iter, T &data)
+	{
+		if (!(iter.pointer >= pointer && iter.pointer <= pointer + sizeof(T) * size)) return;
+		size++;
+		T *new_mas = (T*)calloc(size, sizeof(T));
+		int i;
+		for (i = 0; i < (iter.pointer - pointer)/ sizeof(T); i++)
+			new_mas[i] = pointer[i];
+		new_mas[i] = data;
+		for (; i < size; i++)
+			new_mas[i + 1] = pointer[i];
+		free(pointer);
+		pointer = new_mas;
+	}
+	T &front() { return pointer[0]; }
+	T &back() { return pointer[size - 1]; }
 private:
 	T *pointer;
 	int size;
@@ -79,7 +115,11 @@ private:
 void main() {
 	int m[3] = { 1,2,3 };
 	Vector<int> a(m, 3);
-	std::cout << a[2] << std::endl;
+	Vector<int>::Iterator b;
+	b = a.end();
+	int c = 10;
+	a.pop_back();
+	std::cout << a[0] << a[1] << a[2] << std::endl;
 	system("pause");
 
 }
