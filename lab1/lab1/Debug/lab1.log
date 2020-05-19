@@ -1,3 +1,11 @@
 ﻿  Source.cpp
-d:\for git\lab1\lab1\lab1\source.cpp(115): warning C4326: возвращаемый тип "main" должен быть "int", а не "void"
+d:\for git\lab1\lab1\lab1\source.cpp(110): warning C4326: возвращаемый тип "main" должен быть "int", а не "void"
+d:\for git\lab1\lab1\lab1\source.cpp(95): warning C4018: <: несоответствие типов со знаком и без знака
+  d:\for git\lab1\lab1\lab1\source.cpp(90): note: при компиляции функции-члена "<Нет данных>" класса класс <Нет данных>
+  d:\for git\lab1\lab1\lab1\source.cpp(116): note: выполняется компиляция ссылки на экземпляр шаблон функции "void Vector<int>::insert(Vector<int>::Iterator,T)"
+          with
+          [
+              T=int
+          ]
+  d:\for git\lab1\lab1\lab1\source.cpp(111): note: выполняется компиляция ссылки на экземпляр шаблон класс "Vector<int>"
   lab1.vcxproj -> D:\for git\lab1\lab1\Debug\lab1.exe

@@ -9,14 +9,6 @@ public:
 		size = 0;
 		pointer = nullptr;
 	}
-	Vector(T mas[], int size)
-	{
-		this->size = size;
-		T *new_mas = (T*)calloc(size, sizeof(T));
-		for (int i = 0; i < size; i++)
-			new_mas[i] = mas[i];
-		pointer = new_mas;
-	}
 	~Vector() { if (!pointer) free(pointer); }
 	T& operator[] (const int index) { return pointer[index]; }
 	T& at(const int index) { return pointer[index]; }
@@ -25,19 +17,22 @@ public:
 	{
 		friend Iterator Vector<T>::begin();
 		friend Iterator Vector<T>::end();
-		friend void Vector<T>::insert(Iterator iter, T &data);
+		friend void Vector<T>::insert(Iterator iter, T data);
 	public:
 		Iterator() {};
-		Iterator(Iterator &obj) :pointer(obj.pointer) {};
+		Iterator(const Iterator &obj) 
+		{
+			pointer = obj.pointer;
+		};
 		const Iterator operator++()
 		{
-			pointer += sizeof(T);
+			pointer++;
 			return *this;
 		}
 		const Iterator operator++(int)
 		{
 			Vector<T>::Iterator copy(*this);
-			pointer += sizeof(T);
+			pointer ++;
 			return copy;
 		}
 		T& operator*() { return *pointer; }
@@ -60,7 +55,7 @@ public:
 	Iterator end()
 	{
 		Iterator beg;
-		beg.pointer = pointer + sizeof(T) * size;
+		beg.pointer = pointer + size;
 		return beg;
 	}
 	Vector(Vector &obj)
@@ -72,7 +67,7 @@ public:
 		while (iter != obj.end())
 			pointer[i++] = *iter++;
 	}
-	void push_back(T &data)
+	void push_back(T data)
 	{
 		size++;
 		T *new_mas = (T*)calloc(size, sizeof(T));
@@ -91,9 +86,9 @@ public:
 		free(pointer);
 		pointer = new_mas;
 	}
-	void insert(Iterator iter, T &data)
+	void insert(Iterator iter, T data)
 	{
-		if (!(iter.pointer >= pointer && iter.pointer <= pointer + sizeof(T) * size)) return;
+		if (!(iter.pointer >= pointer && iter.pointer <= pointer + size)) return;
 		size++;
 		T *new_mas = (T*)calloc(size, sizeof(T));
 		int i;
@@ -113,13 +108,14 @@ private:
 };
 
 void main() {
-	int m[3] = { 1,2,3 };
-	Vector<int> a(m, 3);
-	Vector<int>::Iterator b;
-	b = a.end();
-	int c = 10;
+	Vector<int> a;
+	a.push_back(1);
+	a.push_back(2);
+	a.push_back(3);
 	a.pop_back();
-	std::cout << a[0] << a[1] << a[2] << std::endl;
+	a.insert(a.begin(), 3);
+	for (Vector<int>::Iterator b = a.begin(); b != a.end(); b++)
+		std::cout << *b << std::endl;
 	system("pause");
 
 }
